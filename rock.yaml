@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rock-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rock
+  template:
+    metadata:
+      labels:
+        app: rock
+    spec:
+      containers:
+        - name: rock-container
+          image: obiba/rock:latest
+          ports:
+            - containerPort: 8085
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rock-service
+spec:
+  selector:
+    app: rock
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8085
+  type: NodePort  # Expose service externally
