@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rock-spawner-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rock-spawner
+  template:
+    metadata:
+      labels:
+        app: rock-spawner
+    spec:
+      serviceAccountName: rock-spawner-service-account
+      containers:
+        - name: rock-spawner-container
+          image: obiba/rock-spawner@sha256:d326e3638cc27d42e48dc19add2993adfd1f029223ef1f669a6d2f67ca77e741
+          ports:
+            - containerPort: 8000
+          env:
+            - name: NAMESPACE
+              value: "default"
+            - name: APP_IMAGE
+              value: "obiba/rock:latest"
+            - name: APP_PORT
+              value: "8085"
+            - name: API_KEYS
+              value: "changeme123"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rock-spawner-service
+spec:
+  selector:
+    app: rock-spawner
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: NodePort  # Expose service externally

@@ -4,6 +4,9 @@ port=7080
 apply:
 	kubectl apply -f $(service).yaml
 
+apply-rbac:
+	kubectl apply -f $(service)-rbac.yaml
+
 pods:
 	kubectl get pods
 
