@@ -15,7 +15,8 @@ spec:
       serviceAccountName: rock-spawner-service-account
       containers:
         - name: rock-spawner-container
-          image: obiba/rock-spawner@sha256:3150a6d0400739af79ecc7672e147e763857430e6e0a6711c5cd7c168c64973e
+          image: obiba/rock-spawner:snapshot
+          imagePullPolicy: Always
           ports:
             - containerPort: 8000
           env:
