@@ -12,7 +12,7 @@ metadata:
   name: pod-manager-role
 rules:
   - apiGroups: [""]
-    resources: ["pods"]
+    resources: ["pods", "services"]
     verbs: ["create", "delete", "get", "list"]
 
 ---

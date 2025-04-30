@@ -21,3 +21,6 @@ logs:
 
 port-forward:
 	kubectl port-forward service/$(service)-service $(port):80
+
+service-url:
+	minikube service $(service) --url
