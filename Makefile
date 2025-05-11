@@ -1,6 +1,15 @@
 service=rock
 port=7080
 
+start:
+	minikube start
+
+stop:
+	minikube stop
+
+dashboard:
+	minikube dashboard
+
 apply:
 	kubectl apply -f $(service).yaml
 
