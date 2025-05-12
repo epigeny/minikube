@@ -1,4 +1,4 @@
-service=rock
+service=rock-spawner
 port=7080
 
 start:
@@ -24,6 +24,9 @@ services:
 
 delete:
 	kubectl delete -f $(service).yaml
+
+delete-rbac:
+	kubectl delete -f $(service)-rbac.yaml
 
 logs:
 	kubectl logs -f $(shell kubectl get pods -o name | grep $(service))
