@@ -32,7 +32,7 @@ logs:
 	kubectl logs -f $(shell kubectl get pods -o name | grep $(service))
 
 port-forward:
-	kubectl port-forward service/$(service)-service $(port):80
+	kubectl port-forward service/$(service) $(port):80
 
 service-url:
 	minikube service $(service) --url

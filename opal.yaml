@@ -1,0 +1,147 @@
+# Persistent Volume Claim for Opal
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: opal-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+# Persistent Volume Claim for MongoDB
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+# MongoDB Deployment and Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+spec:
+  ports:
+    - port: 27017
+  selector:
+    app: mongo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:6.0
+          ports:
+            - containerPort: 27017
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: root
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: example
+          volumeMounts:
+            - name: mongo-storage
+              mountPath: /data/db
+      volumes:
+        - name: mongo-storage
+          persistentVolumeClaim:
+            claimName: mongo-pvc
+---
+# Rock (R Server) Deployment and Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: rock
+spec:
+  ports:
+    - port: 8085
+  selector:
+    app: rock
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rock
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rock
+  template:
+    metadata:
+      labels:
+        app: rock
+    spec:
+      containers:
+        - name: rock
+          image: obiba/rock:latest
+          ports:
+            - containerPort: 8085
+---
+# Opal Deployment and Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: opal
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    app: opal
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opal
+  template:
+    metadata:
+      labels:
+        app: opal
+    spec:
+      containers:
+        - name: opal
+          image: obiba/opal:snapshot
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MONGO_HOST
+              value: "mongo"
+            - name: MONGODATA_DATABASE
+              value: "opal"
+            - name: MONGO_USER
+              value: "root"
+            - name: MONGO_PASSWORD
+              value: "example"
+            - name: ROCK_HOSTS
+              value: "rock:8085"
+          volumeMounts:
+            - name: opal-storage
+              mountPath: /srv
+      volumes:
+        - name: opal-storage
+          persistentVolumeClaim:
+            claimName: opal-pvc

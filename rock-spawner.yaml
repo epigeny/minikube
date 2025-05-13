@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rock-spawner-deployment
+  name: rock-spawner
 spec:
   replicas: 1
   selector:
@@ -14,7 +14,7 @@ spec:
     spec:
       serviceAccountName: rock-spawner-service-account
       containers:
-        - name: rock-spawner-container
+        - name: rock-spawner
           image: obiba/rock-spawner:snapshot
           imagePullPolicy: Always
           ports:
@@ -28,15 +28,15 @@ spec:
               value: "8085"
             - name: API_KEYS
               value: "changeme123"
-            - name: APP_SERVICE
-              value: "NodePort"
-            - name: APP_SERVICE_IP
-              value: "192.168.49.2"
+            #- name: APP_SERVICE
+            #  value: "NodePort"
+            #- name: APP_SERVICE_IP
+            #  value: "192.168.49.2"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: rock-spawner-service
+  name: rock-spawner
 spec:
   selector:
     app: rock-spawner
