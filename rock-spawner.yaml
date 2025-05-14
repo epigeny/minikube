@@ -1,3 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rock-spawner
+spec:
+  ports:
+    - port: 8000
+  selector:
+    app: rock-spawner
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -32,16 +42,3 @@ spec:
             #  value: "NodePort"
             #- name: APP_SERVICE_IP
             #  value: "192.168.49.2"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: rock-spawner
-spec:
-  selector:
-    app: rock-spawner
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 8000
-  type: NodePort  # Expose service externally
