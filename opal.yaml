@@ -1,70 +1,15 @@
 # Persistent Volume Claim for Opal
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: opal-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
----
-# Persistent Volume Claim for MongoDB
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mongo-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
----
-# MongoDB Deployment and Service
-apiVersion: v1
-kind: Service
-metadata:
-  name: mongo
-spec:
-  ports:
-    - port: 27017
-  selector:
-    app: mongo
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mongo
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: mongo
-  template:
-    metadata:
-      labels:
-        app: mongo
-    spec:
-      containers:
-        - name: mongo
-          image: mongo:6.0
-          ports:
-            - containerPort: 27017
-          env:
-            - name: MONGO_INITDB_ROOT_USERNAME
-              value: root
-            - name: MONGO_INITDB_ROOT_PASSWORD
-              value: example
-          volumeMounts:
-            - name: mongo-storage
-              mountPath: /data/db
-      volumes:
-        - name: mongo-storage
-          persistentVolumeClaim:
-            claimName: mongo-pvc
----
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  name: opal-pvc
+#spec:
+#  accessModes:
+#    - ReadWriteOnce
+#  resources:
+#    requests:
+#      storage: 1Gi
+#---
 # Opal Deployment and Service
 apiVersion: v1
 kind: Service
@@ -91,6 +36,7 @@ spec:
       labels:
         app: opal
     spec:
+      serviceAccountName: rock-spawner-service-account
       containers:
         - name: opal
           image: obiba/opal:snapshot

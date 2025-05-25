@@ -1,4 +1,4 @@
-service=rock-spawner
+service=opal
 port=8080
 
 start:
@@ -14,7 +14,7 @@ apply:
 	kubectl apply -f $(service).yaml
 
 apply-rbac:
-	kubectl apply -f $(service)-rbac.yaml
+	kubectl apply -f rock-spawner-rbac.yaml
 
 pods:
 	kubectl get pods
@@ -26,7 +26,7 @@ delete:
 	kubectl delete -f $(service).yaml
 
 delete-rbac:
-	kubectl delete -f $(service)-rbac.yaml
+	kubectl delete -f rock-spawner-rbac.yaml
 
 logs:
 	kubectl logs -f $(shell kubectl get pods -o name | grep $(service))
