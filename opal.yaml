@@ -1,15 +1,15 @@
 # Persistent Volume Claim for Opal
-#apiVersion: v1
-#kind: PersistentVolumeClaim
-#metadata:
-#  name: opal-pvc
-#spec:
-#  accessModes:
-#    - ReadWriteOnce
-#  resources:
-#    requests:
-#      storage: 1Gi
-#---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: opal-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
 # Opal Deployment and Service
 apiVersion: v1
 kind: Service
@@ -53,7 +53,7 @@ spec:
             - name: MONGO_PASSWORD
               value: "example"
             - name: ROCK_HOSTS
-              value: "rock:8085"
+              value: ""
           volumeMounts:
             - name: opal-storage
               mountPath: /srv
