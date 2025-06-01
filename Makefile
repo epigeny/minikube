@@ -37,9 +37,6 @@ port-forward:
 service-url:
 	minikube service $(service) --url
 
-opal-apps-config:
-	echo '{"token": "","rockConfigs": [{"host": "http://rock:8085"}],"rockSpawnerConfigs": [{"host": "http://rock-spawner:8000"}]}' | opal rest -o http://localhost:8080 -u administrator -p password -ct "application/json" -m PUT /apps/config
-
 k3s-perms:
 	sudo chmod 755 /etc/rancher/k3s
 	sudo chmod 644 /etc/rancher/k3s/k3s.yaml
