@@ -2,7 +2,7 @@ service=opal
 port=8080
 
 start:
-	minikube start
+	minikube start --cpus=4 --memory=8192
 
 stop:
 	minikube stop
